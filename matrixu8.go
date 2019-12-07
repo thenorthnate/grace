@@ -7,8 +7,9 @@ import (
 
 // MatrixU8 is the uint8 Arr implementation
 type MatrixU8 struct {
-	data []uint8
-	m    [][]uint8
+	v   []uint8
+	m   [][]uint8
+	sub []*MatrixU8
 }
 
 // Get returns a slice to the underlying matrix. If provided, it will return just the indicies specified.
@@ -52,12 +53,12 @@ func NewU8(m [][]uint8) *MatrixU8 {
 
 // Reshape shapes the matrix to the given dimensions
 func (a *MatrixU8) Reshape(r, c int) error {
-	if r*c != len(a.data) {
+	if r*c != len(a.v) {
 		return errors.New("invalid shape specified")
 	}
 	a.m = make([][]uint8, r, r)
 	for i := range a.m {
-		a.m[i] = a.data[i*c : (i+1)*c]
+		a.m[i] = a.v[i*c : (i+1)*c]
 	}
 	return nil
 }
@@ -65,7 +66,7 @@ func (a *MatrixU8) Reshape(r, c int) error {
 // Zeros empties the matrix values, and returns a new array of zeros
 func Zeros(r, c int) *MatrixU8 {
 	a := MatrixU8{
-		data: make([]uint8, r*c, r*c),
+		v: make([]uint8, r*c, r*c),
 	}
 	a.Reshape(r, c)
 	return &a
@@ -74,44 +75,44 @@ func Zeros(r, c int) *MatrixU8 {
 func (a *MatrixU8) algebraV(op int, v uint8) {
 	switch op {
 	case OpAdd:
-		for i := range a.data {
-			a.data[i] += v
+		for i := range a.v {
+			a.v[i] += v
 		}
 	case OpSub:
-		for i := range a.data {
-			a.data[i] -= v
+		for i := range a.v {
+			a.v[i] -= v
 		}
 	case OpMul:
-		for i := range a.data {
-			a.data[i] *= v
+		for i := range a.v {
+			a.v[i] *= v
 		}
 	case OpDiv:
-		for i := range a.data {
-			a.data[i] /= v
+		for i := range a.v {
+			a.v[i] /= v
 		}
 	}
 }
 
 func (a *MatrixU8) algebraM(op int, v *MatrixU8) error {
-	if len(a.data) != len(v.data) {
+	if len(a.v) != len(v.v) {
 		return errors.New("arrays must be the same length")
 	}
 	switch op {
 	case OpAdd:
-		for i, val := range v.data {
-			a.data[i] += val
+		for i, val := range v.v {
+			a.v[i] += val
 		}
 	case OpSub:
-		for i, val := range v.data {
-			a.data[i] -= val
+		for i, val := range v.v {
+			a.v[i] -= val
 		}
 	case OpMul:
-		for i, val := range v.data {
-			a.data[i] *= val
+		for i, val := range v.v {
+			a.v[i] *= val
 		}
 	case OpDiv:
-		for i, val := range v.data {
-			a.data[i] /= val
+		for i, val := range v.v {
+			a.v[i] /= val
 		}
 	}
 	return nil
@@ -129,7 +130,7 @@ func (a *MatrixU8) Algebra(b interface{}, op int) error {
 		err := a.algebraM(op, v)
 		return err
 	default:
-		return fmt.Errorf("input not compatible with base array (type: %T)", a.data[0])
+		return fmt.Errorf("input not compatible with base array (type: %T)", a.v[0])
 	}
 	return nil
 }
@@ -158,7 +159,7 @@ func (a *MatrixU8) Sum(axis int) (int64, []int64) {
 		}
 	case 2:
 		s = 0
-		for _, v := range a.data {
+		for _, v := range a.v {
 			s += int64(v)
 		}
 	}
@@ -181,7 +182,7 @@ func (a *MatrixU8) Mean(axis int) (float64, []float64) {
 		// cols
 		lv = len(a.m)
 	case 2:
-		m = float64(s) / float64(len(a.data))
+		m = float64(s) / float64(len(a.v))
 	}
 
 	srl := len(sr)
