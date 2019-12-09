@@ -10,36 +10,41 @@ const (
 	OpMul
 	OpDiv
 
-	gtU8  = "uint8"
-	gtF64 = "float64"
-	gtF32 = "float32"
+	U8  = "uint8"
+	F64 = "float64"
+	F32 = "float32"
 )
 
 // Grace is an interface that supports all operations for matrix manipulations
 type Grace interface {
 	Display(depth int)
-	IsLeaf() bool
-	Shape() []int
-	Ptr() []Grace
-	PtrInit(shape []int)
-	SlcInit(shape []int)
-	Zeros(shape ...int) Grace
+	MkSlc(shape []int)
 }
 
 // Vektr is the grace equivalent of a vector with ptr-dimensions
 type Vektr struct {
 	shape []int
+	dtype string
 	g     Grace
 	ptr   []*Vektr
 }
 
-// Zeros creates a new matrix of zeros with the given dimensions and data type
-func Zeros(dtype string, dims ...int) Grace {
-	switch dtype {
-	case gtF64:
-		return
+// Shape returns the shape of the vektr
+func (vk *Vektr) Shape() []int {
+	return vk.shape
+}
+
+// Ptr returns the pointer to the linked vektr
+func (vk *Vektr) Ptr() []*Vektr {
+	return vk.ptr
+}
+
+// IsLeaf returns the truthiness of whether the vektr is a leaf of the data structure
+func (vk *Vektr) IsLeaf() bool {
+	if vk.ptr == nil {
+		return true
 	}
-	return nil
+	return false
 }
 
 // Show replaces "head" and "tail" for other frameworks. It prints out the matrix to the depth specified.
@@ -47,20 +52,6 @@ func Zeros(dtype string, dims ...int) Grace {
 // values will print out the first rows of a matrix.
 func Show(g Grace, depth int) {
 	g.Display(depth)
-}
-
-// build is a recurrsive function that initializes a grace interface
-func build(parent Grace, shape ...int) {
-	if len(shape) > 1 {
-		// not at the last dimension!
-		parent.PtrInit(shape) // should make and create the structures in memory
-		ptrs := parent.Ptr()
-		for i := range ptrs {
-			build(ptrs[i], shape[1:]...)
-		}
-	} else {
-		parent.SlcInit(shape)
-	}
 }
 
 // At returns the value at the desired location
