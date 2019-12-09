@@ -5,11 +5,22 @@ import (
 	"fmt"
 )
 
-// Vektr is the grace equivalent of a vector with sub-dimensions
+// Vektr is the grace equivalent of a vector with ptr-dimensions
 type Vektr struct {
-	v     []float64
-	sub   []*Vektr
 	shape []int
+	arr   []float64
+	mat   [][]float64
+	ptr   []*Vektr
+}
+
+// Ptr returns the pointer to the linked vektr
+func (vk *Vektr) Ptr() []*Vektr {
+	return vk.ptr
+}
+
+// Shape returns the shape of the vektr
+func (vk *Vektr) Shape() []int {
+	return vk.shape
 }
 
 // Zeros empties the matrix values, and returns a new array of zeros
@@ -24,21 +35,21 @@ func Zeros(shape ...int) *Vektr {
 func build(parent *Vektr, shape ...int) {
 	if len(shape) > 1 {
 		// not at the last dimension!
-		parent.sub = make([]*Vektr, shape[0], shape[0])
-		for i := range parent.sub {
-			parent.sub[i] = &Vektr{
+		parent.ptr = make([]*Vektr, shape[0], shape[0])
+		for i := range parent.ptr {
+			parent.ptr[i] = &Vektr{
 				shape: shape[1:],
 			}
-			build(parent.sub[i], shape[1:]...)
+			build(parent.ptr[i], shape[1:]...)
 		}
 	} else {
-		parent.v = make([]float64, shape[0], shape[0])
+		parent.arr = make([]float64, shape[0], shape[0])
 	}
 }
 
 // IsLeaf returns the truthiness of whether the vektr is a leaf of the data structure
 func (vk *Vektr) IsLeaf() bool {
-	if vk.sub == nil {
+	if vk.ptr == nil {
 		return true
 	}
 	return false
@@ -53,11 +64,11 @@ func (vk *Vektr) Display(depth int) {
 }
 
 func vkShow(vk *Vektr, level, depth int) {
-	if vk.sub != nil {
-		// has sub matrices
-		for i, v := range vk.sub {
+	if vk.ptr != nil {
+		// has ptr matrices
+		for i, v := range vk.ptr {
 			if level == 0 {
-				if inBounds(i, len(vk.sub), depth) {
+				if inBounds(i, len(vk.ptr), depth) {
 					vkShow(v, level+1, depth)
 					fmt.Println()
 				}
@@ -66,7 +77,7 @@ func vkShow(vk *Vektr, level, depth int) {
 			}
 		}
 	} else {
-		fmt.Printf("%v", vk.v)
+		fmt.Printf("%v", vk.arr)
 	}
 
 }
@@ -95,13 +106,13 @@ func (vk *Vektr) At(loc ...int) (float64, error) {
 	}
 	parent := vk
 	for _, idx := range loc {
-		if parent.sub != nil {
-			if idx <= len(parent.sub) {
-				parent = parent.sub[idx]
+		if parent.ptr != nil {
+			if idx <= len(parent.ptr) {
+				parent = parent.ptr[idx]
 			}
 		} else {
 			// in the leaf of the tree
-			return parent.v[idx], nil
+			return parent.arr[idx], nil
 		}
 	}
 	return 0, errors.New("location not found")
