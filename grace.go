@@ -22,11 +22,23 @@ type Grace interface {
 	Shape() []int
 	Ptr() []Grace
 	PtrInit(shape []int)
-	ArrInit(shape []int)
+	SlcInit(shape []int)
+	Zeros(shape ...int) Grace
+}
+
+// Vektr is the grace equivalent of a vector with ptr-dimensions
+type Vektr struct {
+	shape []int
+	g     Grace
+	ptr   []*Vektr
 }
 
 // Zeros creates a new matrix of zeros with the given dimensions and data type
 func Zeros(dtype string, dims ...int) Grace {
+	switch dtype {
+	case gtF64:
+		return
+	}
 	return nil
 }
 
@@ -47,7 +59,7 @@ func build(parent Grace, shape ...int) {
 			build(ptrs[i], shape[1:]...)
 		}
 	} else {
-		parent.ArrInit(shape)
+		parent.SlcInit(shape)
 	}
 }
 

@@ -3,27 +3,37 @@ package vkf64
 import (
 	"errors"
 	"fmt"
+
+	"github.com/thenorthnate/grace"
 )
 
 // Vektr is the grace equivalent of a vector with ptr-dimensions
 type Vektr struct {
 	shape []int
-	arr   []float64
+	slc   []float64
 	mat   [][]float64
 	ptr   []*Vektr
 }
 
-// Ptr returns the pointer to the linked vektr
-func (vk *Vektr) Ptr() []*Vektr {
-	return vk.ptr
+type VKf64 struct {
+	slc []float64
+	mat [][]float64
 }
 
+// PtrInit initializes a new slice of sub nodes
 func (vk *Vektr) PtrInit(shape []int) {
-
+	vk.shape = shape
+	vk.ptr = make([]*Vektr, shape[0], shape[0])
+	for i := range vk.ptr {
+		vk.ptr[i] = &Vektr{
+			shape: shape[1:],
+		}
+	}
 }
 
-func (vk *Vektr) ArrInit(shape []int) {
-
+// SlcInit initializes the array with 0 values
+func (vk *Vektr) SlcInit(shape []int) {
+	vk.slc = make([]float64, shape[0], shape[0])
 }
 
 // Shape returns the shape of the vektr
@@ -31,11 +41,24 @@ func (vk *Vektr) Shape() []int {
 	return vk.shape
 }
 
+// Slc returns the pointer to the linked vektr
+func (vk *Vektr) Slc() []float64 {
+	return vk.slc
+}
+
+// Mat returns the pointer to the linked vektr
+func (vk *Vektr) Mat() [][]float64 {
+	return vk.mat
+}
+
+// Ptr returns the pointer to the linked vektr
+func (vk *Vektr) Ptr() []grace.Grace {
+	return vk.ptr
+}
+
 // Zeros empties the matrix values, and returns a new array of zeros
-func Zeros(shape ...int) *Vektr {
-	vk := Vektr{
-		shape: shape,
-	}
+func Zeros(shape ...int) grace.Grace {
+	vk := Vektr{}
 	build(&vk, shape...)
 	return &vk
 }
@@ -51,7 +74,7 @@ func build(parent *Vektr, shape ...int) {
 			build(parent.ptr[i], shape[1:]...)
 		}
 	} else {
-		parent.arr = make([]float64, shape[0], shape[0])
+		parent.slc = make([]float64, shape[0], shape[0])
 	}
 }
 
@@ -85,7 +108,7 @@ func vkShow(vk *Vektr, level, depth int) {
 			}
 		}
 	} else {
-		fmt.Printf("%v", vk.arr)
+		fmt.Printf("%v", vk.slc)
 	}
 
 }
@@ -120,7 +143,7 @@ func (vk *Vektr) At(loc ...int) (float64, error) {
 			}
 		} else {
 			// in the leaf of the tree
-			return parent.arr[idx], nil
+			return parent.slc[idx], nil
 		}
 	}
 	return 0, errors.New("location not found")
