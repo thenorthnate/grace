@@ -18,6 +18,14 @@ func (vk *Vektr) Ptr() []*Vektr {
 	return vk.ptr
 }
 
+func (vk *Vektr) PtrInit(shape []int) {
+
+}
+
+func (vk *Vektr) ArrInit(shape []int) {
+
+}
+
 // Shape returns the shape of the vektr
 func (vk *Vektr) Shape() []int {
 	return vk.shape
