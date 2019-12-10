@@ -9,10 +9,6 @@ const (
 	OpSub
 	OpMul
 	OpDiv
-	// F64 describes the float64 data type
-	F64
-	// U8 describes the uint8 data type
-	U8
 )
 
 // Grace is an interface that supports all operations for matrix manipulations
@@ -25,7 +21,7 @@ type Grace interface {
 // Vektr is the grace package equivalent of a vector with ptr-dimensions
 type Vektr struct {
 	shape []int
-	dtype int
+	dtype string
 	g     Grace
 	ptr   []*Vektr
 }
@@ -59,12 +55,7 @@ func (vk *Vektr) IsLeaf() bool {
 
 // DType decodes the datatype into a human readable string
 func (vk *Vektr) DType() string {
-	switch vk.dtype {
-	case F64:
-		return "float64"
-	default:
-		return ""
-	}
+	return vk.dtype
 }
 
 // Vat returns the Vektr at the desired location

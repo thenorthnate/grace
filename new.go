@@ -9,7 +9,7 @@ func Zeros(base func() Grace, shape ...int) *Vektr {
 
 // build is a recurrsive function that initializes a grace interface
 func build(parent *Vektr, base func() Grace, shape ...int) {
-	// parent.dtype = dtype
+	parent.dtype = base().GetType()
 	if len(shape) > 2 {
 		// not at the last 2 dimensions!
 		parent.mkPtr(shape) // creates structures and sets shape
@@ -18,9 +18,8 @@ func build(parent *Vektr, base func() Grace, shape ...int) {
 		}
 	} else {
 		// At the final one or two dimensions
-		fullBase := base()
-		fullBase.MkSlc(shape)
-		parent.g = fullBase
+		parent.g = base()
+		parent.g.MkSlc(shape)
 	}
 }
 

@@ -13,5 +13,5 @@ func TestVektr(t *testing.T) {
 	}
 	fmt.Println(vk.mat)
 
-	fmt.Println(vk.GetType())
+	fmt.Println(z.DType())
 }
