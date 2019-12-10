@@ -6,7 +6,23 @@ import (
 
 // Max returns the maximum value of a vektr
 func Max(vk *grace.Vektr) interface{} {
-	return 0
+	var mv float64
+	grace.Execute(vk, exMaxFunc, &mv)
+	return mv
+}
+
+func exMaxFunc(vk *grace.Vektr, params interface{}) {
+	slc := vk.G().Slc()
+	switch tpSlc := slc.(type) {
+	case []float64:
+		mv, _ := params.(*float64)
+		for _, v := range tpSlc {
+			if v > *mv {
+				*mv = v
+			}
+		}
+	}
+
 }
 
 // Min returns the minimum value of a vektr

@@ -13,6 +13,16 @@ func TypeFloat64() Grace {
 	return &VkF64{}
 }
 
+// Slc returns the slice in the grace interface
+func (vv *VkF64) Slc() interface{} {
+	return vv.slc
+}
+
+// Mat returns the matrix in the grace interface
+func (vv *VkF64) Mat() interface{} {
+	return vv.mat
+}
+
 // GetType returns the data type of the grace structure
 func (vv *VkF64) GetType() string {
 	slcType := fmt.Sprintf("%T", vv.slc)

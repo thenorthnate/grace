@@ -14,4 +14,7 @@ func TestVektr(t *testing.T) {
 	fmt.Println(vk.mat)
 
 	fmt.Println(z.DType())
+
+	mx := Max(z)
+	fmt.Println(mx)
 }

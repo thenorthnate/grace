@@ -17,6 +17,8 @@ type Grace interface {
 	Display(depth int)
 	MkSlc(shape []int)
 	Cp() Grace
+	Slc() interface{}
+	Mat() interface{}
 }
 
 // Vektr is the grace package equivalent of a vector with ptr-dimensions
@@ -44,6 +46,11 @@ func (vk *Vektr) Size() int {
 // Ptr returns the pointer to the linked vektr
 func (vk *Vektr) Ptr() []*Vektr {
 	return vk.ptr
+}
+
+// G returns the grace sub interface
+func (vk *Vektr) G() Grace {
+	return vk.g
 }
 
 // IsLeaf returns the truthiness of whether the vektr is a leaf of the data structure
@@ -84,10 +91,10 @@ func (vk *Vektr) Reshape(shape ...int) error {
 }
 
 // Execute applies a recursive execution of the given function to leaf nodes
-func Execute(vk *Vektr, execF func(inVk *Vektr, params ...interface{}), execParams ...interface{}) {
+func Execute(vk *Vektr, execF func(inVk *Vektr, params interface{}), execParams interface{}) {
 	if !vk.IsLeaf() {
 		for i := range vk.ptr {
-			Execute(vk.ptr[i], execF)
+			Execute(vk.ptr[i], execF, execParams)
 		}
 	} else {
 		// is a leaf
