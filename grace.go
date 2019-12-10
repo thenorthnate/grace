@@ -16,6 +16,7 @@ type Grace interface {
 	GetType() string
 	Display(depth int)
 	MkSlc(shape []int)
+	Cp() Grace
 }
 
 // Vektr is the grace package equivalent of a vector with ptr-dimensions
@@ -80,4 +81,17 @@ func (vk *Vektr) Vat(loc ...int) (*Vektr, error) {
 // Reshape the matrix
 func (vk *Vektr) Reshape(shape ...int) error {
 	return nil
+}
+
+// Execute applies a recursive execution of the given function to leaf nodes
+func Execute(vk *Vektr, execF func(inVk *Vektr, params ...interface{}), execParams ...interface{}) {
+	if !vk.IsLeaf() {
+		for i := range vk.ptr {
+			Execute(vk.ptr[i], execF)
+		}
+	} else {
+		// is a leaf
+		execF(vk, execParams)
+	}
+
 }

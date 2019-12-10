@@ -14,9 +14,42 @@ func TypeFloat64() Grace {
 }
 
 // GetType returns the data type of the grace structure
-func (vk *VkF64) GetType() string {
-	slcType := fmt.Sprintf("%T", vk.slc)
+func (vv *VkF64) GetType() string {
+	slcType := fmt.Sprintf("%T", vv.slc)
 	return slcType[2:]
+}
+
+// MkSlc initializes the array with 0 values
+func (vv *VkF64) MkSlc(shape []int) {
+	var r, c int
+	if len(shape) == 2 {
+		r = shape[0]
+		c = shape[1]
+	} else if len(shape) == 1 {
+		r = 1
+		c = shape[0]
+	}
+	vv.slc = make([]float64, r*c, r*c)
+	vv.Reshape(r, c)
+
+}
+
+func (vv *VkF64) Display(depth int) {
+
+}
+
+// Cp makes a copy of the data structure
+func (vv *VkF64) Cp() Grace {
+	r := len(vv.mat)
+	c := len(vv.mat[0])
+
+	dest := make([]float64, len(vv.slc), len(vv.slc))
+	_ = copy(dest, vv.slc)
+	vv2 := VkF64{
+		slc: dest,
+	}
+	vv2.Reshape(r, c)
+	return &vv2
 }
 
 // mkF64 creates a new float64 leaf
@@ -26,32 +59,13 @@ func mkF64(shape ...int) *VkF64 {
 	return &leaf
 }
 
-// MkSlc initializes the array with 0 values
-func (vk *VkF64) MkSlc(shape []int) {
-	var r, c int
-	if len(shape) == 2 {
-		r = shape[0]
-		c = shape[1]
-	} else if len(shape) == 1 {
-		r = 1
-		c = shape[0]
-	}
-	vk.slc = make([]float64, r*c, r*c)
-	vk.Reshape(r, c)
-
-}
-
 // Reshape shapes the matrix to the given dimensions
-func (vk *VkF64) Reshape(r, c int) {
-	if r*c != len(vk.slc) {
+func (vv *VkF64) Reshape(r, c int) {
+	if r*c != len(vv.slc) {
 		return
 	}
-	vk.mat = make([][]float64, r, r)
-	for i := range vk.mat {
-		vk.mat[i] = vk.slc[i*c : (i+1)*c]
+	vv.mat = make([][]float64, r, r)
+	for i := range vv.mat {
+		vv.mat[i] = vv.slc[i*c : (i+1)*c]
 	}
-}
-
-func (vk *VkF64) Display(depth int) {
-
 }
