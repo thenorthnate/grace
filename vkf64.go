@@ -1,9 +1,22 @@
 package grace
 
+import "fmt"
+
 // VkF64 implements the float 64 implementation of the grace interface
 type VkF64 struct {
 	slc []float64
 	mat [][]float64
+}
+
+// TypeFloat64 returns a grace interface with subtype of float64
+func TypeFloat64() Grace {
+	return &VkF64{}
+}
+
+// GetType returns the data type of the grace structure
+func (vk *VkF64) GetType() string {
+	slcType := fmt.Sprintf("%T", vk.slc)
+	return slcType[2:]
 }
 
 // mkF64 creates a new float64 leaf

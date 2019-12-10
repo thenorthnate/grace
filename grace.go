@@ -17,6 +17,7 @@ const (
 
 // Grace is an interface that supports all operations for matrix manipulations
 type Grace interface {
+	GetType() string
 	Display(depth int)
 	MkSlc(shape []int)
 }

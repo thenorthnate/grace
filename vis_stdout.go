@@ -1,7 +1,5 @@
 package grace
 
-import "fmt"
-
 // visualize the data to stdout
 
 // Show replaces "head" and "tail" for other frameworks. It prints out the matrix to the depth specified.
@@ -11,6 +9,7 @@ func (vk *Vektr) Show(depth int) {
 	vk.g.Display(depth)
 }
 
+/*
 // Display prints the matrix to make it visible
 func (vk *Vektr) Display(depth int) {
 	vkShow(vk, 0, depth)
@@ -54,3 +53,4 @@ func inBounds(idx int, mLen int, bounds ...int) bool {
 	}
 	return false
 }
+*/
