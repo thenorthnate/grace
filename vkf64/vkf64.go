@@ -1,7 +1,6 @@
 package vkf64
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -55,23 +54,4 @@ func inBounds(idx int, mLen int, bounds ...int) bool {
 		}
 	}
 	return false
-}
-
-// At returns the value at the desired location
-func (vk *Vektr) At(loc ...int) (float64, error) {
-	if len(loc) != len(vk.shape) {
-		return 0, errors.New("improper constraints to identify value at location")
-	}
-	parent := vk
-	for _, idx := range loc {
-		if parent.ptr != nil {
-			if idx <= len(parent.ptr) {
-				parent = parent.ptr[idx]
-			}
-		} else {
-			// in the leaf of the tree
-			return parent.slc[idx], nil
-		}
-	}
-	return 0, errors.New("location not found")
 }

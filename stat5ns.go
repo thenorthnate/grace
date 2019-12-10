@@ -1,16 +1,37 @@
 package grace
 
+// Provides functionality to get the 5 number summary of the data set
+
+func (vk *Vektr) Max() float64 {
+	return 0
+}
+
+func (vk *Vektr) Min() float64 {
+	return 0
+}
+
+func (vk *Vektr) Mean() float64 {
+	return 0
+}
+
+func (vk *Vektr) Median() float64 {
+	return 0
+}
+
+func (vk *Vektr) UpperQ() float64 {
+	return 0
+}
+
+func (vk *Vektr) LowerQ() float64 {
+	return 0
+}
+
+/*
 import (
 	"errors"
 	"fmt"
 )
 
-// MatrixU8 is the uint8 Arr implementation
-type MatrixU8 struct {
-	v   []uint8
-	m   [][]uint8
-	sub []*MatrixU8
-}
 
 // Get returns a slice to the underlying matrix. If provided, it will return just the indicies specified.
 func (a *MatrixU8) Get(loc ...int) [][]uint8 {
@@ -42,15 +63,6 @@ func (a *MatrixU8) Set(r, c int, v uint8) {
 	a.m[r][c] = v
 }
 
-// NewU8 creates a new MatrixU8 (dtype=uint8)
-func NewU8(m [][]uint8) *MatrixU8 {
-	a := Zeros(len(m), len(m[0]))
-	for i := range m {
-		copy(a.m[i], m[i])
-	}
-	return a
-}
-
 // Reshape shapes the matrix to the given dimensions
 func (a *MatrixU8) Reshape(r, c int) error {
 	if r*c != len(a.v) {
@@ -61,15 +73,6 @@ func (a *MatrixU8) Reshape(r, c int) error {
 		a.m[i] = a.v[i*c : (i+1)*c]
 	}
 	return nil
-}
-
-// Zeros empties the matrix values, and returns a new array of zeros
-func Zeros(r, c int) *MatrixU8 {
-	a := MatrixU8{
-		v: make([]uint8, r*c, r*c),
-	}
-	a.Reshape(r, c)
-	return &a
 }
 
 func (a *MatrixU8) algebraV(op int, v uint8) {
@@ -203,3 +206,4 @@ func (a *MatrixU8) Dot(b *MatrixU8) error {
 func (a *MatrixU8) Identity() {
 
 }
+*/

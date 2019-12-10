@@ -1,19 +1,14 @@
 package grace
 
-/*
-type Arrf64 struct {
-	Data  []float64
-	Value [][]float64
-}
+import (
+	"errors"
+)
 
-func (a *Arru8) ToFloat64() Arrf64 {
-	out := Arrf64{
-		Data: make([]float64, len(a.Data), cap(a.Data)),
+// AsF64 returns the typed grace component as a float64 struct
+func AsF64(g Grace) (*VkF64, error) {
+	vk, ok := g.(*VkF64)
+	if !ok {
+		return vk, errors.New("invalid type check... must convert explicitly")
 	}
-	for i := range a.Data {
-		out.Data[i] = float64(a.Data[i])
-	}
-	out.reshape(len(a.Value), len(a.Value[0]))
-	return out
+	return vk, nil
 }
-*/

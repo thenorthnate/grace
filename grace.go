@@ -9,10 +9,10 @@ const (
 	OpSub
 	OpMul
 	OpDiv
-
-	U8  = "uint8"
-	F64 = "float64"
-	F32 = "float32"
+	// F64 describes the float64 data type
+	F64
+	// U8 describes the uint8 data type
+	U8
 )
 
 // Grace is an interface that supports all operations for matrix manipulations
@@ -21,10 +21,10 @@ type Grace interface {
 	MkSlc(shape []int)
 }
 
-// Vektr is the grace equivalent of a vector with ptr-dimensions
+// Vektr is the grace package equivalent of a vector with ptr-dimensions
 type Vektr struct {
 	shape []int
-	dtype string
+	dtype int
 	g     Grace
 	ptr   []*Vektr
 }
@@ -47,6 +47,16 @@ func (vk *Vektr) IsLeaf() bool {
 	return false
 }
 
+// DType decodes the datatype into a human readable string
+func (vk *Vektr) DType() string {
+	switch vk.dtype {
+	case F64:
+		return "float64"
+	default:
+		return ""
+	}
+}
+
 // Show replaces "head" and "tail" for other frameworks. It prints out the matrix to the depth specified.
 // If depth == 0, it will print the entire matrix. If depth is negative, it acts like "tail". Positive
 // values will print out the first rows of a matrix.
@@ -54,22 +64,26 @@ func Show(g Grace, depth int) {
 	g.Display(depth)
 }
 
-// At returns the value at the desired location
-func At(g Grace, loc ...int) (float64, error) {
-	if len(loc) != len(g.Shape()) {
-		return 0, errors.New("improper constraints to identify value at location")
+// Vat returns the Vektr at the desired location
+func (vk *Vektr) Vat(loc ...int) (*Vektr, error) {
+	if len(loc) != len(vk.shape) {
+		return vk, errors.New("improper constraints to identify value at location")
 	}
-	parent := g
+	parent := vk
 	for _, idx := range loc {
-		tmpPs := parent.Ptr()
-		if tmpPs != nil {
-			if idx <= len(tmpPs) {
-				parent = tmpPs[idx]
+		if parent.ptr != nil {
+			if idx <= len(parent.ptr) {
+				parent = parent.ptr[idx]
 			}
 		} else {
 			// in the leaf of the tree
-			return parent.v[idx], nil
+			return parent, nil
 		}
 	}
-	return 0, errors.New("location not found")
+	return vk, errors.New("location not found")
+}
+
+// Reshape the matrix
+func (vk *Vektr) Reshape(shape ...int) error {
+	return nil
 }
