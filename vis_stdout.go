@@ -1,15 +1,14 @@
-package vkf64
+package grace
 
-import (
-	"fmt"
-)
+import "fmt"
 
-// Vektr is the grace equivalent of a vector with ptr-dimensions
-type Vektr struct {
-	shape []int
-	slc   []float64
-	mat   [][]float64
-	ptr   []*Vektr
+// visualize the data to stdout
+
+// Show replaces "head" and "tail" for other frameworks. It prints out the matrix to the depth specified.
+// If depth == 0, it will print the entire matrix. If depth is negative, it acts like "tail". Positive
+// values will print out the first rows of a matrix.
+func (vk *Vektr) Show(depth int) {
+	vk.g.Display(depth)
 }
 
 // Display prints the matrix to make it visible

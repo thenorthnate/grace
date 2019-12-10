@@ -34,6 +34,15 @@ func (vk *Vektr) Shape() []int {
 	return vk.shape
 }
 
+// Size returns the size of the Vektr
+func (vk *Vektr) Size() int {
+	size := 1
+	for _, dim := range vk.shape {
+		size *= dim
+	}
+	return size
+}
+
 // Ptr returns the pointer to the linked vektr
 func (vk *Vektr) Ptr() []*Vektr {
 	return vk.ptr
@@ -55,13 +64,6 @@ func (vk *Vektr) DType() string {
 	default:
 		return ""
 	}
-}
-
-// Show replaces "head" and "tail" for other frameworks. It prints out the matrix to the depth specified.
-// If depth == 0, it will print the entire matrix. If depth is negative, it acts like "tail". Positive
-// values will print out the first rows of a matrix.
-func Show(g Grace, depth int) {
-	g.Display(depth)
 }
 
 // Vat returns the Vektr at the desired location

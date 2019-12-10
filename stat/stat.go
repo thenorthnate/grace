@@ -1,28 +1,36 @@
-package grace
+package stat
 
-// Provides functionality to get the 5 number summary of the data set
+import (
+	"github.com/thenorthnate/grace"
+)
 
-func (vk *Vektr) Max() float64 {
+// Max returns the maximum value of a vektr
+func Max(vk *grace.Vektr) interface{} {
 	return 0
 }
 
-func (vk *Vektr) Min() float64 {
+// Min returns the minimum value of a vektr
+func Min(vk *grace.Vektr) float64 {
 	return 0
 }
 
-func (vk *Vektr) Mean() float64 {
+// Mean returns the mean value of a vektr
+func Mean(vk *grace.Vektr) float64 {
 	return 0
 }
 
-func (vk *Vektr) Median() float64 {
+// Median returns the median value of a vektr
+func Median(vk *grace.Vektr) float64 {
 	return 0
 }
 
-func (vk *Vektr) UpperQ() float64 {
+// UpperQ returns the upper quartile value of a vektr
+func UpperQ(vk *grace.Vektr) float64 {
 	return 0
 }
 
-func (vk *Vektr) LowerQ() float64 {
+// LowerQ returns the lower quartile value of a vektr
+func LowerQ(vk *grace.Vektr) float64 {
 	return 0
 }
 
