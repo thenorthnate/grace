@@ -5,9 +5,13 @@ import (
 )
 
 const (
+	// OpAdd defines an add operation
 	OpAdd = iota
+	// OpSub defines an subtraction operation
 	OpSub
+	// OpMul defines an multiply operation
 	OpMul
+	// OpDiv defines an divide operation
 	OpDiv
 )
 
@@ -19,6 +23,11 @@ type Grace interface {
 	Cp() Grace
 	Slc() interface{}
 	Mat() interface{}
+}
+
+// Ops defines the base statistical operations
+type Ops interface {
+	Max() interface{}
 }
 
 // Vektr is the grace package equivalent of a vector with ptr-dimensions

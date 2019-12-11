@@ -21,6 +21,13 @@ func exMaxFunc(vk *grace.Vektr, params interface{}) {
 				*mv = v
 			}
 		}
+	case []uint8:
+		mv, _ := params.(*uint8)
+		for _, v := range tpSlc {
+			if v > *mv {
+				*mv = v
+			}
+		}
 	}
 
 }

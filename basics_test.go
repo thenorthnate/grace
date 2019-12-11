@@ -15,6 +15,18 @@ func TestVektr(t *testing.T) {
 
 	fmt.Println(z.DType())
 
-	mx := Max(z)
-	fmt.Println(mx)
+}
+
+func TestGu8(t *testing.T) {
+	g := Gu8{}
+	g.arange(0, 10, 2)
+	fmt.Println(g.slc)
+
+	g.arange(10)
+	fmt.Println(g.slc)
+
+	g.arange(1, 5)
+	fmt.Println(g.slc)
+
+	a := Empty()
 }
