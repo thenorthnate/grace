@@ -35,6 +35,18 @@ func (nd *Ndu8) setSlc(data interface{}) error {
 	return nil
 }
 
+func (nd *Ndu8) get(loc ...int) error {
+	// [
+	//	[[1, 1, 1], [2, 2, 2]],
+	//  [[1, 1, 1], [2, 2, 2]]
+	// ]
+	// 2x2x3
+	// [1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2]
+	// get(0) --> [[1, 1, 1], [2, 2, 2]]
+	// get(0, 0) --> [1, 1, 1]
+	// get(0, 0, 0) --> 1
+}
+
 func (nd *Ndu8) arange(start, end, step uint8) error {
 	size := (end - start) / step
 	nd.initSlc(int(size))

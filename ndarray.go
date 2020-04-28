@@ -122,3 +122,10 @@ func mkArangeParams(params ...interface{}) ([]float64, error) {
 	}
 	return p, nil
 }
+
+func Get(nda NdArray, loc ...int) (NdArray, error) {
+	// new copy of nda2
+	// then err := nda2.get(loc...)
+	// return nda2, err
+	return nil, nil
+}
