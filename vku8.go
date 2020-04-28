@@ -1,6 +1,8 @@
 package grace
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // VkU8 implements the uint8 implementation of the grace interface
 type VkU8 struct {
