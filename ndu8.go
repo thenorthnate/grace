@@ -76,3 +76,25 @@ func (nd *Ndu8) cp() *Ndu8 {
 	_ = copy(new.slc, nd.slc)
 	return &new
 }
+
+func (nd *Ndu8) apply(fn func(s []int, slc interface{}) (NdArray, error)) (NdArray, error) {
+	return fn(nd.s, nd.slc)
+}
+
+func (nd *Ndu8) add(nda NdArray) (NdArray, error) {
+	arr, ok := nda.(*Ndu8)
+	if !ok {
+		return nil, errors.New("invalid type for operation")
+	}
+	ndlen := len(nd.slc)
+	arlen := len(arr.slc)
+	if ndlen != arlen {
+		return nil, errors.New("invalid slc lengths for operation")
+	}
+	newarr := make([]uint8, ndlen, ndlen)
+	for i, v := range nd.slc {
+		newarr[i] = v + arr.slc[i]
+	}
+	n, err := New(newarr)
+	return n, err
+}

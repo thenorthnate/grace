@@ -1,6 +1,7 @@
 package grace
 
 import (
+	"errors"
 	"fmt"
 	"testing"
 )
@@ -30,4 +31,20 @@ func TestTrimTo(t *testing.T) {
 	}
 
 	fmt.Println(narr)
+}
+
+func sampleDoubleApplyFunc(s []int, slc interface{}) (NdArray, error) {
+	useSlc, ok := slc.([]uint8)
+	if !ok {
+		return nil, errors.New("invalid type")
+	}
+	newSlc := make([]uint8, len(useSlc), len(useSlc))
+	for i, v := range useSlc {
+		newSlc[i] = v * 2
+	}
+	return New(newSlc)
+}
+
+func TestApply(t *testing.T) {
+
 }

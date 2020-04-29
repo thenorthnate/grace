@@ -11,6 +11,7 @@ type NdArray interface {
 	setSlc(data interface{}) error
 	trimTo(start, end int) error
 	get(start, end int) (NdArray, error)
+	apply(fn func(s []int, slc interface{}) (NdArray, error)) (NdArray, error)
 }
 
 // Shape returns the shape of the NdArray
@@ -70,6 +71,7 @@ func New(data interface{}) (NdArray, error) {
 	return nda, nil
 }
 
+// Get returns a new NdArray sliced to the given location
 func Get(nda NdArray, loc ...int) (NdArray, error) {
 	// new copy of nda2
 	// then err := nda2.get(loc...)
@@ -93,3 +95,9 @@ func Get(nda NdArray, loc ...int) (NdArray, error) {
 	// _ = nda.trimTo(ptr, ptr+si)
 	return nda.get(ptr, ptr+si)
 }
+
+/*
+	Loc(nda NdArray, loc ...interface{}) (NdArray, error)
+	nda, _ = Loc(nda, "0:4", "10:")
+	nda, _ = Loc(nda, 0, 1)
+*/
